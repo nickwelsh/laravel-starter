@@ -1,0 +1,170 @@
+name: Linting
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: ☁️ Cache PHP dependencies
+        id: cache-php
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('composer.lock') }}
+
+      - name: 📦 Install PHP dependencies
+        if: steps.cache-php.outputs.cache-hit != 'true'
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: 🐤 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: ☁️ Cache Node dependencies
+        id: cache-node
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            .bun
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+
+      - name: 📦 Install Node dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: bun install
+
+  lint-eslint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with: { php-version: '8.4' }
+
+      - name: ☁️ Restore PHP dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: 🐤 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with: { bun-version: latest }
+
+      - name: ☁️ Restore Node dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            .bun
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: 🎨 Run ESLint
+        run: composer lint:eslint
+
+      - name: 🚀 Auto-commit ESLint fixes
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: 'chore: 🚨 Fix ESLint issues'
+          commit_options: '--no-verify'
+
+  lint-phpstan:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with: { php-version: '8.4' }
+
+      - name: ☁️ Restore PHP dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: 🐛 Run PHPStan
+        run: composer lint:phpstan
+
+  lint-types:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ☁️ Restore PHP dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: 🐤 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with: { bun-version: latest }
+
+      - name: ☁️ Restore Node dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            .bun
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: 🏃 Run type check
+        run: composer lint:types
+
+  lint-typos:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ☁️ Restore PHP dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: 📦 Install Aspell
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y aspell aspell-en
+
+      - name: ✏️ Run typo check
+        run: composer lint:typos

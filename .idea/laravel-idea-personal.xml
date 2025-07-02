@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LaravelIdeaPersonalSettings">
+    <option name="generationStringOptionValues">
+      <map>
+        <entry key="createEnum.backed" value=": string" />
+        <entry key="createFormRequest.generateAuthorize" value="" />
+        <entry key="newModelSimpleOption:addFillable" value="1" />
+        <entry key="postGeneration:databaseClassFactory" value="1" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,39 @@
+name: Rector
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: 📦 Install PHP dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: 🏃 Run Rector
+        run: composer rector
+
+      - name: 🚀 Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: 'refactor: ♻️ Apply rector code transformations'
+          commit_options: '--no-verify'
