@@ -17,7 +17,7 @@ class InertiaUserData extends Data
 
     public string $avatar;
 
-    public ?InertiaTeamData $currentTeam;
+    public ?InertiaTeamData $currentTeam = null;
 
-    public ?CarbonImmutable $emailVerifiedAt;
+    public ?CarbonImmutable $emailVerifiedAt = null;
 }

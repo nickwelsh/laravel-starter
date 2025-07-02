@@ -17,7 +17,7 @@ class InertiaZiggyData extends Data
 
     public string $location;
 
-    public ?int $port;
+    public ?int $port = null;
 
     /**
      * @var array<string, array{uri: string, methods: array<\App\Enums\HttpMethod>}>
@@ -27,5 +27,5 @@ class InertiaZiggyData extends Data
 
     public string $url;
 
-    public ?string $route;
+    public ?string $route = null;
 }

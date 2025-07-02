@@ -39,15 +39,13 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = DB::transaction(function () use ($request) {
-            return tap(User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]), function (User $user) {
-                $this->createTeam($user);
-            });
-        });
+        $user = DB::transaction(fn() => tap(User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]), function (User $user): void {
+            $this->createTeam($user);
+        }));
 
         event(new Registered($user));
 
@@ -65,7 +63,7 @@ class RegisteredUserController extends Controller
             'user_id' => $user->id,
             'name' => explode(' ', $user->name, 2)[0]."'s Team",
             'personal_team' => true,
-        ]), function (Team $team) use ($user) {
+        ]), function (Team $team) use ($user): void {
             $user->current_team_id = $team->id;
             $user->save();
         }));
