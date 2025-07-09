@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main" type="PestRunConfigurationType">
+    <CommandLine>
+      <envs>
+        <env name="XDEBUG_MODE" value="coverage" />
+      </envs>
+    </CommandLine>
+    <option name="pestRunnerSettings">
+      <PestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" method="" scope="ConfigurationFile" options="--coverage" use_alternative_configuration_file="true" is_parallel_testing_enabled="true">
+        <option name="parallelTestingEnabled" value="true" />
+      </PestRunner>
+    </option>
+    <method v="2" />
+  </configuration>
+</component>

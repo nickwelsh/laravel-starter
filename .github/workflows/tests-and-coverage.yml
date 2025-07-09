@@ -1,0 +1,78 @@
+name: "Tests & Coverage"
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - 'tests-and-coverage.yml'
+      - 'phpunit.xml.dist'
+      - 'composer.json'
+      - 'composer.lock'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        php: [8.4]
+        stability: [prefer-lowest, prefer-stable]
+
+
+    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: xdebug
+
+      - name: 🐤 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with: { bun-version: latest }
+
+      - name: 🤼 Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: 📦 Install PHP dependencies
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: 📦 Install node dependencies
+        run: bun install
+
+      - name: 🔨 Build frontend
+        run: bun run build
+
+      - name: 📝 Copy Environment File
+        run: cp .env.example .env
+
+      - name: 🔑 Generate Application Key
+        run: php artisan key:generate
+
+      - name: 🧪 Execute tests
+        run: vendor/bin/pest --ci --coverage-clover coverage.xml --log-junit junit.xml
+
+      - name: 📈 Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: 📈 Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+

@@ -1,0 +1,130 @@
+{
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "vite build",
+		"build:ssr": "vite build && vite build --ssr",
+		"dev": "vite",
+		"format": "prettier --write resources/ package.json peck.json composer.json tsconfig.json",
+		"lint": "eslint --fix --max-warnings=0 --format=pretty && stylelint --fix './resources/css/**/*.css'",
+		"typecheck": "tsc --noEmit"
+	},
+	"prettier": {
+		"arrowParens": "avoid",
+		"htmlWhitespaceSensitivity": "css",
+		"jsxSingleQuote": true,
+		"plugins": [
+			"prettier-plugin-organize-imports",
+			"prettier-plugin-tailwindcss",
+			"prettier-plugin-packagejson"
+		],
+		"printWidth": 150,
+		"semi": true,
+		"singleAttributePerLine": false,
+		"singleQuote": true,
+		"tabWidth": 4,
+		"tailwindFunctions": [
+			"clsx",
+			"cn"
+		],
+		"tailwindStylesheet": "resources/css/app.css",
+		"useTabs": true,
+		"overrides": [
+			{
+				"files": "**/*.yml",
+				"options": {
+					"tabWidth": 2
+				}
+			}
+		]
+	},
+	"stylelint": {
+		"extends": [
+			"stylelint-config-recommended",
+			"stylelint-config-tailwindcss"
+		],
+		"rules": {
+			"at-rule-no-unknown": [
+				true,
+				{
+					"ignoreAtRules": [
+						"source",
+						"plugin",
+						"theme",
+						"custom-variant"
+					]
+				}
+			],
+			"at-rule-no-deprecated": [
+				true,
+				{
+					"ignoreAtRules": [
+						"apply"
+					]
+				}
+			]
+		}
+	},
+	"dependencies": {
+		"@headlessui/react": "^2.2.4",
+		"@inertiajs/react": "^2.0.14",
+		"@radix-ui/react-avatar": "^1.1.10",
+		"@radix-ui/react-checkbox": "^1.3.2",
+		"@radix-ui/react-collapsible": "^1.1.11",
+		"@radix-ui/react-dialog": "^1.1.14",
+		"@radix-ui/react-dropdown-menu": "^2.1.15",
+		"@radix-ui/react-label": "^2.1.7",
+		"@radix-ui/react-navigation-menu": "^1.2.13",
+		"@radix-ui/react-select": "^2.2.5",
+		"@radix-ui/react-separator": "^1.1.7",
+		"@radix-ui/react-slot": "^1.2.3",
+		"@radix-ui/react-toggle": "^1.1.9",
+		"@radix-ui/react-toggle-group": "^1.1.10",
+		"@radix-ui/react-tooltip": "^1.2.7",
+		"@t3-oss/env-core": "^0.13.8",
+		"@tailwindcss/vite": "^4.1.11",
+		"@types/react": "^19.1.8",
+		"@types/react-dom": "^19.1.6",
+		"@vitejs/plugin-react": "^4.6.0",
+		"babel-plugin-react-compiler": "^19.1.0-rc.2",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"concurrently": "^9.2.0",
+		"globals": "^16.3.0",
+		"laravel-vite-plugin": "^1.3",
+		"lucide-react": "^0.525.0",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"tailwind-merge": "^3.3.1",
+		"tailwindcss": "^4.1.11",
+		"tailwindcss-animate": "^1.0.7",
+		"typescript": "^5.8.3",
+		"vite": "^7.0",
+		"zod": "^4.0.0"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.30.1",
+		"@types/bun": "^1.2.18",
+		"@types/node": "^24.0.12",
+		"eslint": "^9.30.1",
+		"eslint-config-prettier": "^10.1.5",
+		"eslint-formatter-pretty": "^6.0.1",
+		"eslint-plugin-perfectionist": "^4.15.0",
+		"eslint-plugin-react": "^7.37.5",
+		"eslint-plugin-react-hooks": "^6.0.0-rc.1",
+		"prettier": "^3.6.2",
+		"prettier-plugin-organize-imports": "^4.1.0",
+		"prettier-plugin-packagejson": "^2.5.18",
+		"prettier-plugin-tailwindcss": "^0.6.14",
+		"stylelint": "^16.21.1",
+		"stylelint-config-recommended": "^16.0.0",
+		"stylelint-config-tailwindcss": "^1.0.0",
+		"typescript-eslint": "^8.36.0",
+		"vite-plugin-ziggy": "^0.3.0"
+	},
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-gnu": "4.44.2",
+		"@tailwindcss/oxide-linux-x64-gnu": "^4.1.11",
+		"lightningcss-linux-x64-gnu": "^1.30.1"
+	}
+}

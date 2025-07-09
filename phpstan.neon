@@ -1,0 +1,17 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+
+parameters:
+    level: 6
+    paths:
+        - app/
+    ignoreErrors:
+        - message: '#Method App\\Models\\User::currentTeam\(\) should return .* but returns .*#'
+          path: app/Models/HasTeams.php
+        - message: '#Method App\\Models\\User::ownedTeams\(\) should return .* but returns .*#'
+          path: app/Models/HasTeams.php
+        - message: '#Method App\\Models\\User::teams\(\) should return .* but returns .*#'
+          path: app/Models/HasTeams.php
+        - message: '#Method App\\Models\\Team::user\(\) should return .* but returns .*#'
+          path: app/Models/Team.php
