@@ -1,51 +1,51 @@
-export type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
-export type InertiaAuthData = {
+export type HttpMethod = 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'PATCH' | 'POST' | 'PUT' | 'TRACE';
+export interface InertiaAuthData {
 	user: InertiaUserData | null;
-};
-export type InertiaData = {
+}
+export interface InertiaData {
 	auth: InertiaAuthData;
-	errors: { [key: string]: string } | null;
+	errors: null | Record<string, string>;
 	name: string;
 	quote: InertiaQuoteData;
 	sidebarOpen: boolean;
-};
-export type InertiaQuoteData = {
-	message: string;
+}
+export interface InertiaQuoteData {
 	author: string;
-};
-export type InertiaTeamData = {
+	message: string;
+}
+export interface InertiaTeamData {
 	id: number;
 	name: string;
-};
-export type InertiaUserData = {
-	id: number;
-	name: string;
-	email: string;
+}
+export interface InertiaUserData {
 	avatar: string;
 	currentTeam: InertiaTeamData | null;
-	emailVerifiedAt: string | null;
-};
-export type InertiaZiggyData = {
+	email: string;
+	emailVerifiedAt: null | string;
+	id: number;
+	name: string;
+}
+export interface InertiaZiggyData {
 	defaults: Record<string, unknown>;
 	location: string;
-	port: number | null;
-	routes: Record<string, { uri: string; methods: HttpMethod[] }>;
+	port: null | number;
+	route: null | string;
+	routes: Record<string, { methods: HttpMethod[]; uri: string; }>;
 	url: string;
-	route: string | null;
-};
-export type PaginationData = {
-	total: number;
-	perPage: number;
+}
+export interface PaginationData {
 	currentPage: number;
+	from: null | number;
 	lastPage: number;
-	from: number | null;
-	to: number | null;
-	nextPageUrl: string | null;
-	prevPageUrl: string | null;
-	links: Array<PaginationLinkData>;
-};
-export type PaginationLinkData = {
-	url: string | null;
-	label: string;
+	links: PaginationLinkData[];
+	nextPageUrl: null | string;
+	perPage: number;
+	prevPageUrl: null | string;
+	to: null | number;
+	total: number;
+}
+export interface PaginationLinkData {
 	active: boolean;
-};
+	label: string;
+	url: null | string;
+}
